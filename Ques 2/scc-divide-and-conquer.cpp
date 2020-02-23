@@ -62,7 +62,7 @@ void sccDivideAndConquer(Graph &graph, vector <long long int> &valid, Components
     }
 
     // get predecessors and descendants for the root.
-    vector <long long int> pred(graph.no_vertex), desc(graph.no_vertex);
+    vector <long long int> pred(graph.nodes), desc(graph.nodes);
     graph.findPredecessors(root, valid, pred);
     graph.findDescendants(root, valid, desc);
 
@@ -86,13 +86,31 @@ void sccDivideAndConquer(Graph &graph, vector <long long int> &valid, Components
     Parameters: 1. reference to an object of the Graph class, whose SCCs are to be found.
 */
 void getConnectedComponents(Graph &graph, ComponentsList &cl) {
-    vector <long long int> valid(graph.no_vertex, 1);
+    vector <long long int> valid(graph.nodes, 1);
     sccDivideAndConquer(graph, valid, cl);
 }
 
 int main() {
-    Graph graph;
-    ComponentsList cl(graph.no_vertex);
+    long long int nodes, edges;
+
+    cout << "Enter number of Nodes: ";
+    cin >> nodes;
+
+    Graph graph(nodes);
+
+    cout << "Enter number of Edges: ";
+    cin >> edges;
+
+    cout << "Add edges\n";
+
+    long long int u, v;
+    for(int i = 0; i < edges; i++) {
+        cin >> u >> v;
+        graph.addEdge(u, v);
+    }
+    
+    ComponentsList cl(graph.nodes);
+    
     getConnectedComponents(graph, cl);
     cl.printComponents();
 

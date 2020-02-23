@@ -5,34 +5,26 @@ using namespace std;
 
 class Graph {
   public:
-    long long int no_vertex, no_edge;
+    long long int nodes, edges;
     vector<vector<long long int> > adj;
-    vector<vector<long long int> > adjt;
+    vector<vector<long long int> > adj_transpose;
 
-    Graph() {
-        cout << "Number of Vertices: ";
-        cin >> no_vertex;
-        cout << "Number of Edges: ";
-        cin >> no_edge;
-        makeGraph();
+    Graph(long long int node_count) {
+        nodes = node_count;
+        adj.resize(nodes);
+        adj_transpose.resize(nodes);
     }
 
-    void makeGraph();
+    void addEdge(long long int, long long int);
     void findPredecessors(long long int, vector <long long int>&, vector <long long int>&);
     void findDescendants(long long int, vector <long long int>&, vector <long long int>&);
     void dfs(long long int, vector <long long int>&, vector <long long int>&);
     void dfsTranspose(long long int, vector <long long int>&, vector <long long int>&);
 };
 
-void Graph :: makeGraph() {
-    adj.resize(no_vertex + 1);
-    adjt.resize(no_vertex + 1);
-    for (long long int i = 0; i < no_edge; i++) {
-        long long int x, y;
-        cin >> x >> y;
-        adj[x].push_back(y);
-        adjt[y].push_back(x);
-    }
+void Graph :: addEdge(long long int u, long long int v) {
+    adj[u].push_back(v);
+    adj_transpose[v].push_back(u);
 }
 
 /*
@@ -73,8 +65,8 @@ void Graph:: dfs(long long int root, vector <long long int> &valid, vector <long
 
 void Graph:: dfsTranspose(long long int root, vector <long long int> &valid, vector <long long int> &visited) {
     visited[root] = 1;
-    for(long long int i = 0; i < adjt[root].size(); i++) {
-        long long int neighbour = adjt[root][i];
+    for(long long int i = 0; i < adj_transpose[root].size(); i++) {
+        long long int neighbour = adj_transpose[root][i];
         if(valid[neighbour] and !visited[neighbour]) {
             dfsTranspose(neighbour, valid, visited);
         }
