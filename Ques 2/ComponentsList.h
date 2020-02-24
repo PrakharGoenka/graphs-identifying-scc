@@ -13,8 +13,7 @@ public:
 
     void addComponent(vector <long long int> &);
     void printComponents();
-
-    
+    long long int maxComponentSize();    
 };
 
 void ComponentsList :: addComponent(vector <long long int> &component) {
@@ -35,4 +34,12 @@ void ComponentsList :: printComponents() {
         }
         cout << endl;
     }
+}
+
+long long int ComponentsList :: maxComponentSize() {
+    long long int max_component = 0;
+    for(long long int i = 0; i < length; i++) {
+        max_component = max(max_component, (long long int)list[i].size());
+    }
+    return max_component;
 }

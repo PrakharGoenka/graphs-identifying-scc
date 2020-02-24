@@ -2,21 +2,32 @@
 
 using namespace std;
 
-
+//! Represents Data Structure Graph
+/*!
+    Maintains graph in form of adjacency list.
+*/
 class Graph {
   public:
     int no_vertex, no_edge;
     vector<vector<int> > adj;
     vector<vector<int> > adjt;
-
+    
+    //! Constructor for the graph
+    /*!
+        Inputs number of vertices and number of edges.
+    */
     Graph() {
-        cout << "Number of Vertices: ";
+        // cout << "Number of Vertices: ";
         cin >> no_vertex;
-        cout << "Number of Edges: ";
+        // cout << "Number of Edges: ";
         cin >> no_edge;
         makeGraph();
     }
 
+    //!Makes Graph
+    /*!
+        Takes user input and builds the adjacency list
+    */
     void makeGraph();
 };
 
