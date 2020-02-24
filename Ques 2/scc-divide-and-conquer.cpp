@@ -36,7 +36,7 @@ void seperateComponent(vector <long long int> &pred, vector <long long int> &des
     cl.addComponent(component);
 }
 
-void divideGraph(vector <long long int> &valid_pred, vector <long long int> &valid_desc, vector <long long int> valid_rem,
+void divideGraph(vector <long long int> &valid_pred, vector <long long int> &valid_desc, vector <long long int> &valid_rem,
   vector <long long int> &pred, vector <long long int> &desc) {
     for(long long int i = 0; i < valid_pred.size(); i++) {
         valid_pred[i] *= pred[i];
@@ -91,17 +91,24 @@ void getConnectedComponents(Graph &graph, ComponentsList &cl) {
 }
 
 int main() {
+
+    #ifndef ONLINE_JUDGE
+        freopen("input.txt", "r", stdin);
+        // freopen("output.txt", "w", stdout);
+    #endif // ONLINE_JUDGE
+
+
     long long int nodes, edges;
 
-    cout << "Enter number of Nodes: ";
+    // cout << "Enter number of Nodes: ";
     cin >> nodes;
 
     Graph graph(nodes);
 
-    cout << "Enter number of Edges: ";
+    // cout << "Enter number of Edges: ";
     cin >> edges;
 
-    cout << "Add edges\n";
+    // cout << "Add edges\n";
 
     long long int u, v;
     for(int i = 0; i < edges; i++) {
@@ -113,6 +120,7 @@ int main() {
     
     getConnectedComponents(graph, cl);
     cl.printComponents();
+    cout << "Maximum number of nodes in a component " << cl.maxComponentSize() << endl ;
 
     return 0;
 }
