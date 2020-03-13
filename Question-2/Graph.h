@@ -1,61 +1,83 @@
 #include <bits/stdc++.h>
-#include "NodeList.h"
+#include "NodeSet.h"
 
 using namespace std;
 
 
+/*!
+* Abstracts a graph object.
+* A class whose instance represents a graph. It has members to
+* store the adjacency list of the graph
+* store the adjacency list of the transpose of the graph
+* manipulate the graph etc.
+*/
 class Graph {
 public:
     int nodes, edges;
-    vector<vector<int> > adj;
-    vector<vector<int> > adj_transpose;
+    vector<vector<int> > adj; /*!< stores adjacency list of the graph*/
+    vector<vector<int> > adj_transpose; /*!< stores adjacency list of the 
+    transpose of the graph*/
 
+    /*!
+    * Constructor of the class.
+    * \param node_count - the number of nodes present in the graph
+    */
     Graph(int node_count) {
         nodes = node_count;
-        adj.resize(nodes);
-        adj_transpose.resize(nodes);
+        adj.resize(nodes); //resize empty list to the number of nodes 
+        adj_transpose.resize(nodes); //resize empty list to the number of nodes
     }
 
     void addEdge(int, int);
-    void findPredecessors(int, NodeList &, NodeList &);
-    void findDescendants(int, NodeList &, NodeList &);
-    void dfs(int, NodeList &, NodeList &);
-    void dfsTranspose(int, NodeList &, NodeList &);
+    void findPredecessors(int, NodeSet &, NodeSet &);
+    void findDescendants(int, NodeSet &, NodeSet &);
+    void dfs(int, NodeSet &, NodeSet &);
+    void dfsTranspose(int, NodeSet &, NodeSet &);
 };
 
+
+/*!
+* Method to add an edge to the graph.
+* \param u - the source vertex of the new edge
+* \param u - the destination vertex of the new edge
+*/
 void Graph::addEdge(int u, int v) {
-    adj[u].push_back(v);
-    adj_transpose[v].push_back(u);
+    adj[u].push_back(v); // add edge to the original graph
+    adj_transpose[v].push_back(u); // add reversed edge to the transposed graph
 }
 
-/*
-    Function to find the predecessors of the given node in the given graph.
-    Return value: reference to vector of int data type, vector[i] == 1, iff
-    the i'th node is a predecessor of the given root node
-    Parameters:
-    1. reference to an object of the Graph class, on which the traversal needs to be done.
-    2. number of the root node whose predecessors need to be found.
-    3. reference to a vector that marks if a given node belongs to the current subgraph.
+
+/*!
+* Method to find the predecessors of the given node in the given graph.
+* \param root - node whose predecessors are to be found.
+* \param subgraph - ref to the nodeset of nodes in the remaining subgraph. 
+* \param pred - ref to a nodeset that stores the resulting nodes.
 */
-void Graph::findPredecessors(int root, NodeList &subgraph, NodeList &pred) {
+void Graph::findPredecessors(int root, NodeSet &subgraph, NodeSet &pred) {
     dfsTranspose(root, subgraph, pred);
 }
 
-/*  TODO :EDIT THE COMMENTS
-    Function to find the descendants of the given node in the given graph.
-    Return value: reference to vector of int data type, vector[i] == 1, iff
-    the i'th node is a predecessor of the given root node
-    Parameters:
-    1. reference to an object of the Graph class, on which the traversal needs to be done.
-    2. number of the root node whose descendants need to be found.
-    3. reference to a vector that marks if a given node belongs to the current subgraph.
-*/
 
-void Graph::findDescendants(int root, NodeList &subgraph, NodeList &desc) {
+/*!
+* Method to find the descendants of the given node in the given graph.
+* \param root - node whose sudescendants are to be found.
+* \param subgraph - ref to the nodeset of nodes in the remaining subgraph. 
+* \param desc - ref to a nodeset that stores the resulting nodes.
+*/
+void Graph::findDescendants(int root, NodeSet &subgraph, NodeSet &desc) {
     dfs(root, subgraph, desc);
 }
 
-void Graph::dfs(int root, NodeList &subgraph, NodeList &visited) {
+
+/*!
+* Method to implement depth first search from a node on a given subgraph.
+* \param root - node from which the search needs to be done.
+* \param subgraph - ref to a nodeset that represents the subgraph on 
+  which the search needs to be done.
+* \param visited - ref to a nodeset that represents the set of nodes
+  that have already been visited.
+*/
+void Graph::dfs(int root, NodeSet &subgraph, NodeSet &visited) {
     visited.add(root);
     for(int i = 0; i < adj[root].size(); i++) {
         int neighbour = adj[root][i];
@@ -65,7 +87,17 @@ void Graph::dfs(int root, NodeList &subgraph, NodeList &visited) {
     }
 }
 
-void Graph::dfsTranspose(int root, NodeList &subgraph, NodeList &visited) {
+
+/*!
+* Method to implement depth first search from a node on the 
+  transpose of a given subgraph.
+* \param root - node from which the search needs to be done.
+* \param subgraph - ref to a nodeset that represents the subgraph on 
+  which the search needs to be done.
+* \param visited - ref to a nodeset that represents the set of nodes
+  that have already been visited.
+*/
+void Graph::dfsTranspose(int root, NodeSet &subgraph, NodeSet &visited) {
     visited.add(root);
     for(int i = 0; i < adj_transpose[root].size(); i++) {
         int neighbour = adj_transpose[root][i];
