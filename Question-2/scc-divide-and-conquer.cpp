@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include <unistd.h> 
 #include "Graph.h"
 #include "ComponentsList.h"
 
@@ -101,12 +102,24 @@ void getConnectedComponents(Graph &graph, ComponentsList &cl) {
 
 
 /*!
+* Function to create visualization for the graph.
+* The function creates a child process. The child process runs the script
+* visualize.sh that creates visualization for the given graph.
+*/
+void visualize() {
+    if(fork() == 0) {
+        system("./visualize.sh");
+    }
+}
+
+
+/*!
 * The main function.
 * It receives user input for the graph's nodes and edges. It prints
 * the strongly connected components the graph,
 * the maximum nodes contained in a component.
 */
-int main() {
+int main(int argc, char* argv[]) {
     /* change input stream to file I/O */
     #ifndef ONLINE_JUDGE
         freopen("input.txt", "r", stdin);
@@ -126,8 +139,13 @@ int main() {
     ComponentsList cl(graph.nodes); // initialize with number of nodes in the graph
     getConnectedComponents(graph, cl); // store connected components in cl
     cl.printComponents(); // print connected components of the graph
-    cout << "Maximum number of nodes in a component ";
-    cout << cl.maxComponentSize(); // print max size of a component
+
+    cout << "Maximum number of nodes in a component: ";
+    cout << cl.maxComponentSize() << endl; // print max size of a component
+
+    if(argc == 2 && !strcmp(argv[1], "yes")){ //check if visualization expected
+        visualize(); // create visualization for the input graph
+    }    
 
     return 0;
 }
